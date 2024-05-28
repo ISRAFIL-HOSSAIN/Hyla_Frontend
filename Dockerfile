@@ -1,9 +1,6 @@
 # Use an official Node runtime as a parent image
 FROM node:14
 
-# Install Yarn
-RUN npm install -g yarn
-
 # Set the working directory
 WORKDIR /src/pages/index
 
