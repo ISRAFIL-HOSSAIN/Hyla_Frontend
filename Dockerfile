@@ -1,16 +1,44 @@
-FROM node:18-alpine AS builder  # Use alpine base for smaller image size
+FROM node:18-alpine AS base
 
-WORKDIR /src/pages/index
+FROM base AS deps
 
-COPY package*.json ./
-RUN npm install  # Install without --force
+RUN apk add --no-cache libc6-compat
+WORKDIR /pages
 
-# Optional: If necessary, run npm install --force in a separate stage
-FROM node:18-alpine AS installer
+COPY package.json ./
 
+RUN npm update && npm install
+
+# If you want yarn update and  install uncomment the bellow
+
+# RUN yarn install &&  yarn upgrade
+
+FROM base AS builder
+WORKDIR /pages
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+RUN npm run build
+
+FROM base AS runner
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install --force
+ENV NODE_ENV production
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Rest of the Dockerfile stages (copy build output, etc.)
+COPY --from=builder /app/public ./public
+
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node", "server.js"]
