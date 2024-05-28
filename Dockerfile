@@ -1,22 +1,15 @@
-# Use an official Node runtime as a parent image
-FROM node:14
+FROM node:18.16
 
+RUN mkdir /hyla_frontend
 
-# Set the working directory
-WORKDIR /src/pages/index
+WORKDIR /Hyla_Frontend
 
+COPY ./package.json /hyla_frontend
 
-# Install dependencies using Yarn
-RUN yarn install
+RUN npm install --force
 
-# Copy the rest of your application
-COPY . .
+COPY . /hyla_frontend
 
-# Build the application
-RUN yarn build
+RUN npm run build
 
-# Expose the port your app runs on
-EXPOSE 3000
-
-# Start the Next.js application
-CMD [ "yarn", "start" ]
+CMD ["npm", "start"] -- node js 
