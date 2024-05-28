@@ -1,0 +1,40 @@
+import { useState } from 'react';
+import type { FC, ReactNode } from 'react';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import { Footer } from './footer';
+import { MainNavbar } from './main-navbar';
+import { MainSidebar } from './main-sidebar';
+
+interface MainLayoutProps {
+  children?: ReactNode;
+}
+
+const MainLayoutRoot = styled('div')(
+  ({ theme }) => ({
+    backgroundColor: theme.palette.background.default,
+    // height: '100%',
+    // paddingTop: 10
+  })
+);
+
+export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+
+  return (
+    <MainLayoutRoot>
+       {children}
+      {/* <MainNavbar onOpenSidebar={(): void => setIsSidebarOpen(true)} />
+      <MainSidebar
+        onClose={(): void => setIsSidebarOpen(false)}
+        open={isSidebarOpen}
+      />
+      {children}
+      <Footer /> */}
+    </MainLayoutRoot>
+  );
+};
+
+MainLayout.propTypes = {
+  children: PropTypes.node
+};
