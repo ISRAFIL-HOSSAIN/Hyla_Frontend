@@ -3,7 +3,7 @@ FROM node:16-alpine AS builder
 WORKDIR /src/pages/index
 
 COPY package*.json ./
-RUN npm install
+RUN npm install --force
 
 COPY . .
 
