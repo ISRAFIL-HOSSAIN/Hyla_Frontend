@@ -6,10 +6,10 @@ WORKDIR /Hyla_Frontend
 
 COPY ./package.json /hyla_frontend
 
-RUN npm install --force
+RUN yarn install 
 
 COPY . /hyla_frontend
 
-RUN npm run build
+RUN yarn run build
 
 CMD ["npm", "start"] -- node js 
