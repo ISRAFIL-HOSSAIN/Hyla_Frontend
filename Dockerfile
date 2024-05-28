@@ -1,44 +1,24 @@
-FROM node:18-alpine AS base
+# Use an official Node runtime as a parent image
+FROM node:14
 
-FROM base AS deps
 
-RUN apk add --no-cache libc6-compat
-WORKDIR /pages
+# Set the working directory
+WORKDIR /src/pages/index
 
-COPY package.json ./
+# Copy the package.json and yarn.lock
+COPY package.json yarn.lock ./
 
-RUN npm update && npm install --force
+# Install dependencies using Yarn
+RUN yarn install
 
-# If you want yarn update and  install uncomment the bellow
-
-# RUN yarn install &&  yarn upgrade
-
-FROM base AS builder
-WORKDIR /pages
-COPY --from=deps /app/node_modules ./node_modules
+# Copy the rest of your application
 COPY . .
 
-RUN npm run build
+# Build the application
+RUN yarn build
 
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
+# Expose the port your app runs on
 EXPOSE 3000
 
-ENV PORT 3000
-
-CMD ["node", "server.js"]
+# Start the Next.js application
+CMD [ "yarn", "start" ]
