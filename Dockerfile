@@ -1,20 +1,16 @@
-# Use an official Node runtime as a parent image
-FROM node:14
+FROM node:16-alpine AS builder
 
-# Set the working directory
 WORKDIR /src/pages/index
 
-# Copy the package.json and yarn.lock
-COPY package.json yarn.lock ./
+COPY package*.json ./
+RUN npm install
 
-# Install dependencies using Yarn
-RUN yarn install
-
-# Copy the rest of your application
 COPY . .
 
-# Expose the port your app runs on
-EXPOSE 3000
+WORKDIR /app
 
-# Command to run your app
-CMD [ "yarn", "start" ]
+RUN npm run build  # Build the Next.js application (modified)
+
+EXPOSE 3000  # Expose port 3000 (default for Next.js)
+
+CMD [ "npm", "run", "start" ]  # Start the Next.js server
