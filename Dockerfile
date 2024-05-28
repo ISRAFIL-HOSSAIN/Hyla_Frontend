@@ -1,6 +1,6 @@
 FROM node:18-alpine AS builder  # Use alpine base for smaller image size
 
-WORKDIR /app
+WORKDIR /src/pages/index
 
 COPY package*.json ./
 RUN npm install  # Install without --force
