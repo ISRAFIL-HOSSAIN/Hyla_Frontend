@@ -1,16 +1,16 @@
-FROM node:16-alpine AS builder
+FROM node:18-alpine AS builder  # Use alpine base for smaller image size
 
-WORKDIR /src/pages/index
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install  # Install without --force
+
+# Optional: If necessary, run npm install --force in a separate stage
+FROM node:18-alpine AS installer
+
+WORKDIR /app
 
 COPY package*.json ./
 RUN npm install --force
 
-COPY . .
-
-WORKDIR /app
-
-RUN npm run build  # Build the Next.js application (modified)
-
-
-
-CMD [ "npm", "run", "start" ]  # Start the Next.js server
+# Rest of the Dockerfile stages (copy build output, etc.)
