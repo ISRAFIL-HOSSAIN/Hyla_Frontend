@@ -5,8 +5,6 @@ FROM node:14
 # Set the working directory
 WORKDIR /src/pages/index
 
-# Copy the package.json and yarn.lock
-COPY package.json yarn.lock ./
 
 # Install dependencies using Yarn
 RUN yarn install
