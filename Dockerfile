@@ -4,11 +4,11 @@ RUN mkdir /hyla_frontend
 
 WORKDIR /Hyla_Frontend
 
-COPY ./package.json /hyla_frontend
+COPY ./package.json /Hyla_Frontend
 
 RUN yarn install 
 
-COPY . /hyla_frontend
+COPY ./hyla_frontend
 
 RUN yarn run build
 
