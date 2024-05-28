@@ -7,7 +7,7 @@ WORKDIR /pages
 
 COPY package.json ./
 
-RUN npm update && npm install
+RUN npm update && npm install --force
 
 # If you want yarn update and  install uncomment the bellow
 
