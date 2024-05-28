@@ -5,10 +5,8 @@
     COPY package*.json ./
     RUN npm install --production
     
-    # Copy only necessary files for build, excluding .git:
-    COPY --from=source . .[!/.git]  # Exclude .git directory
     
-    RUN npm run build  # Build the production-ready Next.js app
+    RUN npm run build
     
     # Create a slimmer runtime image:
     FROM node:18-alpine AS runner
